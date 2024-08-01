@@ -11,7 +11,7 @@ if %errorlevel% neq 0 (
 REM Step 2: Check if .git exists
 if not exist ".git" (
     echo .git directory does not exist. Cloning repository.
-    git clone https://github.com/therealsunnyxu/charm-health-fax-counter
+    git clone https://github.com/therealsunnyxu/charm-health-fax-counter.git
     if %errorlevel% neq 0 (
         echo Failed to clone the repository.
         exit /b 1
