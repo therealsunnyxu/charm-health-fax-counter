@@ -30,7 +30,7 @@ class BasePageModel:
 
 class HomePageModel(BasePageModel):
     messages_menu_icon_locator = (By.CLASS_NAME, "messages-menu-icon")
-    lock_session_frame_locator = (By.ID, "LockSession")
+    lock_session_frame_locator = (By.ID, "signin_flow")
 
     def __init__(self, driver, wait=1):
         super().__init__(driver, wait)

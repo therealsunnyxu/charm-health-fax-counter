@@ -5,6 +5,7 @@ from fax_counter.scraper.edge_driver_manager import EdgeDriverManager
 from fax_counter.scraper.fax_scraper import FaxScraper
 from fax_counter.utilities import ReportUtilities
 from fax_counter.ui.main_window import MainWindow
+from fax_counter.name_corrector import NameCorrector
 import pandas as pd
 import os
 import time
@@ -56,12 +57,11 @@ class App:
         self.app.title("Scraping Faxes")
         self.app.show_loading_frame()
         self.update_loading_message("Starting the scraping process...")
-        """
 
         self.scraper_thread.start()
         self.check_work_queue()
         self.app.wait_variable(self.scraping_done)
-        """
+
         local_files_path = os.path.join(os.getcwd(), "files")
         sent_path = os.path.join(local_files_path, "sent.csv")
         sent_df = pd.read_csv(sent_path)
@@ -168,6 +168,9 @@ class App:
         fax_scraper = FaxScraper()
         try:
             fax_scraper.start()
+            name_df = self.import_frame.df
+            name_df = NameCorrector.correct_names(name_df)
+
             print("Microsoft Edge started...")
             local_files_path = os.path.join(os.getcwd(), "files")
             home_page: HomePageModel = fax_scraper.navigate_to_home_page()
@@ -190,7 +193,6 @@ class App:
             time.sleep(1)
 
             update_message_queue.put("Categorizing faxes...")
-            name_df = self.import_frame.df
             sent_path = os.path.join(local_files_path, "sent.csv")
             sent_df = pd.read_csv(sent_path)
             sent_df = fax_scraper.get_name_and_page_counts(sent_df, name_df)
